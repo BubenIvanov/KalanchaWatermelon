@@ -31,9 +31,9 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:id="@+id/regemail"
-        android:hint="@string/email"
+        android:inputType="textPassword"
+        android:id="@+id/regpassword"
+        android:hint="@string/password1"
         android:layout_marginTop="20sp"
         android:textSize="25sp"
         />
@@ -45,9 +45,9 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
 
-        android:id="@+id/regpassword"
-        android:textSize="25sp"
-        android:hint="@string/password"
+        android:id="@+id/confirm_password"
+        android:textSize="15sp"
+        android:hint="@string/confirm_password"
         />
 
     <Button

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KalanchaWatermelon</string>
+    <string name="app_name">Watermelon</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="sing_up">Sing Up</string>
     <string name="sing_in">Sing in</string>
@@ -8,4 +8,11 @@
     <string name="backtolog">Back To Log</string>
     <string name="register">Register</string>
     <string name="email">Email</string>
+    <string name="password1">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="title_activity_welcome">Watermelon</string>
+    <string name="search">Search</string>
+
 </resources>

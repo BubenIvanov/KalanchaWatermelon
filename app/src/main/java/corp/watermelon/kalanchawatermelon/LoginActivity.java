@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         session = new Session(this);
 
         if( session.loggedin())
-        {startActivity(new Intent(this,MainActivity.class));
+        {startActivity(new Intent(this,WelcomeActivity.class));
             finish();}
     }
 
@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if((name.getText().toString().equals(account.getString(Pref_Name, "")))&&
                         (cipher_object.decrypt(account.getString(Pref_Pass,""),"somekeyword").equals(password.getText().toString())))
                 {session.setLoggedin(true);
-                    startActivity(new Intent(this, MainActivity.class));
+                    startActivity(new Intent(this, WelcomeActivity.class));
                 }
                 else Toast.makeText(getApplicationContext(),"Not Good user info",Toast.LENGTH_SHORT).show();
                 break;

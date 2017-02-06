@@ -1,5 +1,8 @@
 package corp.watermelon.kalanchawatermelon;
 
+/**
+ * Created by Buben Ivanov on 06.02.2017.
+ */
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,13 +10,10 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-/**
- * Created by Buben Ivanov on 02.02.2017.
- */
 
 public class FruitsAdapter extends RecyclerView.Adapter<FruitsViewHolder>{
     //Здесь мы будем хранить набор наших данных
-    private ArrayList<Fruits> fruits;
+    private ArrayList<Fruits> fruits=new ArrayList<>();
 
     //Простенький конструктор
     public FruitsAdapter(ArrayList<Fruits> fruits){
@@ -49,6 +49,13 @@ public class FruitsAdapter extends RecyclerView.Adapter<FruitsViewHolder>{
         //не мудрствуя лукаво, вернём размер списка
         return fruits.size();
     }
+    public void setFilter(ArrayList<Fruits> newList)
+    {fruits=new ArrayList<>();
+        fruits.addAll(newList);
+        notifyDataSetChanged();
+
+
+
+
+    }
 }
-
-

@@ -1,0 +1,76 @@
+package corp.watermelon.kalanchawatermelon;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+/**
+ * Created by Buben Ivanov on 06.02.2017.
+ */
+public class DbHelper extends SQLiteOpenHelper {
+    public static final String TAG=DbHelper.class.getSimpleName();
+    public static final String DB_name="person_register.db";
+    public static final int DB_version=1;
+    public static final String User_Table="RecyclerViewData";
+    public static final String COLUMN_ID="_id";
+    public static final String COLUMN_Email="Email";
+    public static final String COLUMN_name="Name";
+    public static final String COLUMN_pass="Password";
+    public static final String Create_Table_Users="CREATE TABLE "+User_Table+"("+
+            COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+            COLUMN_Email+" TEXT,"+
+            COLUMN_name+" TEXT,"+
+            COLUMN_pass+" TEXT);";
+
+    public DbHelper(Context context)
+    {super (context,DB_name,null,DB_version);}
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(Create_Table_Users);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS "+User_Table);
+        onCreate(db);
+    }
+
+    public void addUser(String email,String name,String password)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put(COLUMN_Email,email);
+        values.put(COLUMN_name,name);
+        values.put(COLUMN_pass,password);
+        long id=db.insert(User_Table,null,values);
+        db.close();
+        Log.d(TAG,"user inserted"+id);
+
+
+    }
+    public boolean getUser(String pass,String name){
+        String selectQuery = "select * from  " + User_Table + " where " +
+                COLUMN_pass + " = " + "'"+pass+"'" + " and " + COLUMN_name + " = " + "'"+name+"'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+
+            return true;
+        }
+        cursor.close();
+        db.close();
+
+        return false;
+    }
+
+
+
+}
