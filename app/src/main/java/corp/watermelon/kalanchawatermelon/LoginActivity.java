@@ -16,9 +16,11 @@ import static corp.watermelon.kalanchawatermelon.RegistrActivity.Pref_Pass;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button Sing_in,Sing_up;
     EditText name,password;
-    private SharedPreferences account;
+    private Session session;
+    public Vigenere cipher_object;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,22 +29,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         name=(EditText) findViewById(R.id.user_name);
         password=(EditText) findViewById(R.id.pass);
 
-        Sing_in = (Button) findViewById(R.id.Sing_in);
-        Sing_up = (Button) findViewById(R.id.Sing_up);
-        Sing_in.setOnClickListener(this);
-        Sing_up.setOnClickListener(this);
+        Button sing_in = (Button) findViewById(R.id.Sing_in);
+        Button sing_up = (Button) findViewById(R.id.Sing_up);
+        sing_in.setOnClickListener(this);
+        sing_up.setOnClickListener(this);
+        session = new Session(this);
+
+        if( session.loggedin())
+        {startActivity(new Intent(this,MainActivity.class));
+            finish();}
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.Sing_in:
-                account = getSharedPreferences(Pref_Account, Context.MODE_PRIVATE);
+                cipher_object=new Vigenere();
+                SharedPreferences account = getSharedPreferences(Pref_Account, Context.MODE_PRIVATE);
                 if((name.getText().toString().equals(account.getString(Pref_Name, "")))&&
-                        (password.getText().toString().equals(account.getString(Pref_Pass,""))))
-                {
-                    Intent welcome = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(welcome);
+                        (cipher_object.decrypt(account.getString(Pref_Pass,""),"somekeyword").equals(password.getText().toString())))
+                {session.setLoggedin(true);
+                    startActivity(new Intent(this, MainActivity.class));
                 }
                 else Toast.makeText(getApplicationContext(),"Not Good user info",Toast.LENGTH_SHORT).show();
                 break;
