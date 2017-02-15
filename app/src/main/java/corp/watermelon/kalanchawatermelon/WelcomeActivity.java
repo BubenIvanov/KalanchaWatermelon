@@ -1,5 +1,7 @@
 package corp.watermelon.kalanchawatermelon;
 
+import android.app.Dialog;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,16 +14,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 
 public class WelcomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     RecyclerView rvMain;
-    //И его адаптер
+
     public ArrayList<Fruits> fruits;
     FruitsAdapter fruitsAdapter;
-    ArrayAdapter<String> adapter;
+    EditText nameTxt,posTxt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +34,13 @@ public class WelcomeActivity extends AppCompatActivity implements SearchView.OnQ
         setContentView(R.layout.activity_welcome);
 
         rvMain = (RecyclerView)findViewById(R.id.myRecyclerView);
-        //Создадим адаптер
-        fruitsAdapter = new FruitsAdapter(getPersons());
-        //Применим наш адаптер к RecyclerView
+
+        fruitsAdapter = new FruitsAdapter(this,getPersons());
+
         rvMain.setAdapter(fruitsAdapter);
-        //И установим LayoutManager
+
         rvMain.setLayoutManager(new LinearLayoutManager(this));
+
 
 
 
@@ -47,8 +53,7 @@ public class WelcomeActivity extends AppCompatActivity implements SearchView.OnQ
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                showDialog();
             }
         });
     }
@@ -63,11 +68,93 @@ public class WelcomeActivity extends AppCompatActivity implements SearchView.OnQ
         return  true;
     }
 
+    private void showDialog()
+    {
+        Dialog d=new Dialog(this);
+
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        d.setContentView(R.layout.custom_layout);
+        nameTxt= (EditText) d.findViewById(R.id.nameEditTxt);
+        posTxt= (EditText) d.findViewById(R.id.posEditTxt);
+        Button savebtn= (Button) d.findViewById(R.id.saveBtn);
+        Button retrieveBtn= (Button) d.findViewById(R.id.retrieveBtn);
+
+        savebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save(nameTxt.getText().toString(),posTxt.getText().toString());
+            }
+        });
+        retrieveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retrieve();
+            }
+        });
+
+        d.show();
+    }
+
+    private void save(String name,String pos)
+    {
+        DBAdapter db=new DBAdapter(this);
+
+        db.openDB();
+
+        long result=db.add(name,pos);
+        if(result>0)
+        {
+            nameTxt.setText("");
+            posTxt.setText("");
+        }else
+        {
+            Snackbar.make(nameTxt,"Unable To Insert",Snackbar.LENGTH_SHORT).show();
+        }
+
+        db.close();
+
+        retrieve();
+    }
+    private void retrieve()
+    {
+        DBAdapter db=new DBAdapter(this);
+
+        db.openDB();
+        fruits.clear();
+
+        Cursor c=db.getAllFruits();
+
+        while (c.moveToNext())
+        {
+            int id=c.getInt(0);
+            String name=c.getString(1);
+            String mud=c.getString(2);
+
+            Fruits p=new Fruits(id,name,mud,R.drawable.watermelon1);
+
+            fruits.add(p);
+        }
+
+        if(!(fruits.size()<1))
+        {
+            rvMain.setAdapter(fruitsAdapter);
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        retrieve();
+    }
+
+
+
     public ArrayList<Fruits> getPersons(){
         fruits = new ArrayList<>();
 
-        Fruits arbuz = new Fruits();
-        arbuz.name = "Arbuz";
+        Fruits arbuz = new Fruits(6,"Arbuz","Cutted",R.drawable.watermelon1);
+        fruits.add(arbuz);
+       /* arbuz.name = ;
         arbuz.mud = "Cutted";
         arbuz.photoResId = R.drawable.watermelon1;
         fruits.add(arbuz);
@@ -113,7 +200,7 @@ public class WelcomeActivity extends AppCompatActivity implements SearchView.OnQ
         apple12.name = "Apple";
         apple12.mud = "Not angry";
         apple12.photoResId = R.drawable.apple12;
-        fruits.add(apple12);
+        fruits.add(apple12);*/
 
 
 
@@ -142,4 +229,6 @@ public class WelcomeActivity extends AppCompatActivity implements SearchView.OnQ
 fruitsAdapter.setFilter(newList);
         return true;
     }
+
+
 }

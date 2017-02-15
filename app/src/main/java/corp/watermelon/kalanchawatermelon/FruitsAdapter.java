@@ -3,6 +3,8 @@ package corp.watermelon.kalanchawatermelon;
 /**
  * Created by Buben Ivanov on 06.02.2017.
  */
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,50 +14,61 @@ import java.util.ArrayList;
 
 
 public class FruitsAdapter extends RecyclerView.Adapter<FruitsViewHolder>{
-    //Здесь мы будем хранить набор наших данных
+Context c;
     private ArrayList<Fruits> fruits=new ArrayList<>();
 
-    //Простенький конструктор
-    public FruitsAdapter(ArrayList<Fruits> fruits){
+    public FruitsAdapter(Context ctx,ArrayList<Fruits> fruits){
+        this.c=ctx;
         this.fruits = fruits;
     }
 
-    //Этот метод вызывается при прикреплении нового элемента к RecyclerView
     @Override
     public void onBindViewHolder(FruitsViewHolder fruitsViewHolder, int i){
-        //Получаем элемент набора данных для заполнения
+
         Fruits currentFruits = fruits.get(i);
-        //Заполняем поля viewHolder'а данными из элемента набора данных
-        fruitsViewHolder.tvName.setText(currentFruits.name);
-        // fruitsViewHolder.tvId.setText(currentFruits.id);
-        fruitsViewHolder.tvSurname.setText(currentFruits.mud);
+
+        fruitsViewHolder.frName.setText(currentFruits.name);
+
+        fruitsViewHolder.frMud.setText(currentFruits.mud);
         fruitsViewHolder.photo.setImageResource(currentFruits.photoResId);
+
+        fruitsViewHolder.setItemClickListener(new CardClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+
+                Intent i=new Intent(c,Edit_Activity.class);
+
+                i.putExtra("NAME",fruits.get(pos).getName());
+                i.putExtra("MUD",fruits.get(pos).getMud());
+                i.putExtra("ID",fruits.get(pos).getId());
+
+                c.startActivity(i);
+            }
+        });
+
+
     }
 
-    //Этот метод вызывается при создании нового ViewHolder'а
+
 
     @Override
     public FruitsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
-        //Создаём новый view при помощи LayoutInflater
-        //Особенно упорные могут создать его программно с помощью view.addView
+
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_view, viewGroup, false);
 
         return new FruitsViewHolder(itemView);
     }
 
-    //Этот метод возвращает количество элементов списка
     @Override
     public int getItemCount(){
-        //не мудрствуя лукаво, вернём размер списка
+
         return fruits.size();
     }
+
     public void setFilter(ArrayList<Fruits> newList)
-    {fruits=new ArrayList<>();
+    {
+        fruits=new ArrayList<>();
         fruits.addAll(newList);
         notifyDataSetChanged();
-
-
-
-
     }
 }

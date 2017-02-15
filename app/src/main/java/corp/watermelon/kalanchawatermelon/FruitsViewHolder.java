@@ -9,20 +9,30 @@ import android.widget.TextView;
  * Created by Buben Ivanov on 06.02.2017.
  */
 
-public class FruitsViewHolder extends RecyclerView.ViewHolder {
-    //объявим поля, созданные в файле интерфейса itemView.xml
-    public TextView tvName;
-    public TextView tvSurname;
-    public TextView tvId;
-    public ImageView photo;
+public class FruitsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    //объявляем конструктор
+    public TextView frName;
+    public TextView frMud;
+
+    public ImageView photo;
+    CardClickListener cardClickListener;
+
     public FruitsViewHolder(View itemView){
         super(itemView);
-        //привязываем элементы к полям
-        tvName = (TextView)itemView.findViewById(R.id.tvName);
-        tvSurname = (TextView)itemView.findViewById(R.id.tvSurname);
-        // tvId = (TextView)itemView.findViewById(R.id.tvId);
+        frName = (TextView)itemView.findViewById(R.id.tvName);
+        frMud = (TextView)itemView.findViewById(R.id.tvSurname);
         photo = (ImageView)itemView.findViewById(R.id.ivItem);
+        itemView.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+        this.cardClickListener.onItemClick(v,getLayoutPosition());
+    }
+    public void setItemClickListener(CardClickListener ic)
+    {
+
+        this.cardClickListener=ic;
+    }
+
 }
