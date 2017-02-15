@@ -14,5 +14,16 @@
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_welcome">Watermelon</string>
     <string name="search">Search</string>
+    <string name="exit">exit</string>
+    <string name="player_profile">Fruit info</string>
+    <string name="name1">Fruit name</string>
+    <string name="position1">Fruit mud</string>
+    <string name="save">Save</string>
+    <string name="retrieve">Retrive</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="position">Position :</string>
+    <string name="nameedit">Name</string>
+    <string name="fruit_info">PLAYER PROFILE</string>
 
 </resources>
